@@ -1,0 +1,55 @@
+{
+  "summary": "First full E2E test of UKM Permadu Darmajaya. Backend: 34 pytest cases (health, auth/JWT, seed counts, filters, dashboard/summary aggregation, RBAC for all 6 roles, CRUD+persistence for programs/finances/documents/agenda/users) - all 34 PASSED (100%). Frontend: Playwright runs across ketua, bendahara, sekretaris, kabid.kerohanian and anggota - login (quick-login + manual), invalid-login error, route guard, role-based sidebar, dashboard stats/charts/agenda, program bidang filter + ketua approve, keuangan tabs + create/delete transaksi, sekretariat 4 tabs + create/delete dokumen, agenda create + month grouping, anggota directory + role filters, logout and mobile menu - all functional flows PASSED. Additional exploratory API probing found RBAC scoping and validation gaps (see backend_issues). All TEST_ data created was cleaned up; seed counts restored (12 users / 9 programs / 9 finances / 7 documents / 6 agenda).",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "PATCH /api/programs/{id}, DELETE /api/programs/{id}, POST /api/programs", "issue": "Kabid RBAC is not scoped to their own bidang. Verified: kabid.kerohanian successfully PATCHed (200) and DELETEd (200, deleted=1) a 'Seni & Budaya' program created by kabid.seni, and successfully created a program for bidang 'Humas & Media'. Frontend only hides other bidang via client-side filter, so this is exploitable via API. Enforce user['bidang'] == program['bidang'] for kabid on create/update/delete.", "priority": "HIGH"},
+      {"endpoint": "POST /api/programs/{id}/status?status=", "issue": "status is an unvalidated raw `str` query param. Verified: status=NONSENSE returned 200 and was persisted, corrupting the status enum used by dashboard aggregation (program_by_status). Use Literal/Enum validation matching ProgramCreate.status.", "priority": "HIGH"}
+    ],
+    "minor": [
+      {"endpoint": "DELETE /api/{programs|finances|documents|agenda|users}/{id}", "issue": "Deleting a non-existent id returns 200 {'deleted': 0} instead of 404; clients cannot distinguish success from no-op (frontend still toasts 'Dihapus')."},
+      {"endpoint": "POST /api/{programs|finances|documents|agenda|users}", "issue": "Create endpoints return 200 instead of 201 Created."},
+      {"endpoint": "GET /api/users", "issue": "Any authenticated role (incl. anggota) receives full directory with email, phone, nim of all 12 users. Acceptable for a directory feature but consider trimming PII for role=anggota."},
+      {"endpoint": "PATCH /api/users/{id}", "issue": "UserUpdate.role is a free-form Optional[str] (not Literal), so an invalid role string can be persisted; also bidang is not validated against BIDANGS anywhere."},
+      {"endpoint": "app startup", "issue": "Uses deprecated @app.on_event('startup'/'shutdown'); migrate to FastAPI lifespan handlers."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Keuangan / Sekretariat / Agenda / Program dialogs", "issues": ["Date fields use the native browser date input (<Input type=\"date\">) rather than the shadcn Calendar/Popover date picker used elsewhere in the design system - inconsistent look across browsers"]},
+      {"screen": "Keuangan - Transaksi Baru", "issues": ["After saving a new transaction the active tab filter (e.g. 'keluar') is kept, so a newly created 'masuk' transaction is invisible even though the toast says saved. Consider resetting the tab to 'semua' or switching to the created type after save."]},
+      {"screen": "Program / Sekretariat / Agenda dialogs", "issues": ["No client-side validation: a program can be saved with empty description/dates/budget=0 (produced a card showing 'Rp 0' and '- -> -'). Mark required fields and disable Simpan until valid."]},
+      {"screen": "Global", "issues": ["Destructive deletes use window.confirm() instead of the shadcn AlertDialog - inconsistent with the rest of the polished UI."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Scope kabid permissions to their own bidang for POST/PATCH/DELETE /api/programs (currently cross-bidang write is possible).",
+    "Validate the `status` query param of POST /api/programs/{id}/status with the same Literal enum as ProgramCreate (NONSENSE was accepted and stored).",
+    "Return 404 from DELETE endpoints when nothing was deleted, and 201 from create endpoints.",
+    "Constrain UserUpdate.role to the Literal role set and validate bidang against BIDANGS.",
+    "Fix react/no-unstable-nested-components lint errors in AnggotaPage.jsx (Section/UserCard defined inside render).",
+    "Optional UX: reset Keuangan tab filter after creating a transaction; add required-field validation in create dialogs; replace window.confirm with AlertDialog; use shadcn date picker."
+  ],
+  "critical_code_review_comments": [
+    "server.py create_program/update_program/delete_program rely only on require_roles('ketua','wakil','kabid') - add an ownership check `if user['role']=='kabid' and payload.bidang != user['bidang']: raise HTTPException(403)` and the same for the target document on PATCH/DELETE.",
+    "set_program_status signature `status: str` bypasses Pydantic validation because it is a bare query param - use `status: Literal[...]` or an Enum.",
+    "Delete handlers silently succeed on missing ids (`return {'deleted': r.deleted_count}`) - raise 404 when deleted_count == 0.",
+    "AnggotaPage.jsx defines <Section> and <UserCard> components inside the render body (eslint react/no-unstable-nested-components), remounting the whole subtree on every state change (filter clicks).",
+    "server.py is 564 lines and holds models + auth + all routers + seed data; consider splitting into routers/, models/, seed.py before it grows past 700 lines."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py",
+    "/app/frontend/src/pages/ProgramPage.jsx",
+    "/app/frontend/src/pages/AnggotaPage.jsx",
+    "/app/frontend/src/pages/KeuanganPage.jsx"
+  ],
+  "success_rate": {"backend": "100% (34/34 pytest cases; RBAC scoping gaps found via exploratory probing, not counted as endpoint failures)", "frontend": "100% of tested flows"},
+  "seed_data_creation": "No permanent seed data added. Temporary TEST_ records (program, finance, document, agenda, user) were created and deleted; verified zero TEST_ leftovers and seed counts back to 12/9/9/7/6. Program 'Bakti Sosial Desa Rama Utama' was approved then reverted to 'diusulkan'.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "/app/memory/test_credentials.md - all accounts password permadu123 (ketua@, wakil@, sekretaris@, bendahara@, kabid.kerohanian@, anggota@permadu.darmajaya.ac.id)",
+  "context_for_next_testing_agent": "Backend regression suite is at /app/backend/tests/backend_test.py (34 cases, run: pytest backend/tests/backend_test.py). Frontend data-testids: login-*, quick-login-<role-slug> (e.g. quick-login-kabid-kerohanian; quick-login only fills email, password is prefilled), sidebar-link-{home|anggota|program|keuangan|sekretariat|agenda}, logout-btn, mobile-menu-btn, stat-{anggota|program|saldo|doc}, program-card-<id>, add/save-program-btn, program-filter-{all|<bidang>} (added by me), user-card-<id>, anggota-filter-{all|<role>} (added by me), finance-tab-{semua|masuk|keluar} (added by me), add/save-finance-btn, finance-amount-input, tab-{surat_masuk|surat_keluar|notulen|arsip}, add/save-document-btn, doc-title-input, add/save-agenda-btn, agenda-title-input. NOTE: Login page auto-redirects to / when a token exists, so always logout (logout-btn) before switching roles in Playwright. Deletes use window.confirm - register page.on('dialog', accept). Not yet retested: wakil role UI, user create/edit via Anggota UI dialog, program Edit dialog for kabid.",
+  "rca_of_the_issue": "RBAC gap RCA: require_roles() only checks the role string and never compares user['bidang'] with the target program's bidang, so any kabid token can write to any bidang's programs; the UI hides them only via a client-side filter in ProgramPage.load(). Status corruption RCA: set_program_status declares `status: str`, which FastAPI treats as an unconstrained query parameter, so Pydantic never validates it against the 6 allowed values and the raw string is written straight into Mongo via $set, later feeding dashboard program_by_status buckets."
+}

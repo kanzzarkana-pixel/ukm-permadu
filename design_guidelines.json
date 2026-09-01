@@ -1,0 +1,74 @@
+{
+  "app_name": "UKM Permadu Darmajaya Portal",
+  "app_type": "hybrid_fullstack_role_dashboard",
+  "theme": {
+    "archetype": "ORGANIC & EARTHY / CAMPUS PROFESSIONAL",
+    "primary_color": "#1B4D3E",
+    "secondary_color": "#D4AF37",
+    "accent_color": "#C25932",
+    "background_color": "#F8F9FA",
+    "surface_color": "#FFFFFF",
+    "text_primary": "#1A2E26",
+    "text_muted": "#5A7368"
+  },
+  "typography": {
+    "heading_font": "Plus Jakarta Sans, sans-serif",
+    "body_font": "Inter, sans-serif",
+    "mono_font": "JetBrains Mono, monospace"
+  },
+  "roles_supported": [
+    {
+      "role": "Ketua Umum",
+      "email": "ketua@permadu.darmajaya.ac.id",
+      "description": "Full organization oversight, approval of all work programs, budgets, and major letters."
+    },
+    {
+      "role": "Wakil Ketua Umum",
+      "email": "wakil@permadu.darmajaya.ac.id",
+      "description": "Supervising department heads (Kabid), activity monitoring, and internal coordination."
+    },
+    {
+      "role": "Sekretaris",
+      "email": "sekretaris@permadu.darmajaya.ac.id",
+      "description": "Managing official letters (surat masuk/keluar), meeting agendas, minutes (notulen), and archive documents."
+    },
+    {
+      "role": "Bendahara",
+      "email": "bendahara@permadu.darmajaya.ac.id",
+      "description": "Managing income, expenses, cash flow, sponsorship, and financial reports (Laporan Keuangan)."
+    },
+    {
+      "role": "Kepala Bidang (Kabid)",
+      "email": "kabid.kerohanian@permadu.darmajaya.ac.id",
+      "description": "Managing specific department programs (Kerohanian, Sosial & Pengabdian, Seni & Budaya, Humas & Media)."
+    },
+    {
+      "role": "Anggota",
+      "email": "anggota@permadu.darmajaya.ac.id",
+      "description": "Viewing member directory, active work programs, schedule of worship/yoga/parade budaya, and community feed."
+    }
+  ],
+  "features": [
+    "Role-based secure authentication (JWT / session with demo quick-login switcher)",
+    "Dashboard for Ketua Umum, Wakil, Sekretaris, Bendahara, Kabid, and Anggota with dedicated metrics and action cards",
+    "Member & organizational structure management (Anggota & Kepengurusan CRUD with MongoDB)",
+    "Work programs (Program Kerja) & activities tracker with status and budget allocation",
+    "Financial management (Keuangan - Income, Expenses, Kas, Budget requests & Laporan)",
+    "Letter administration & secretariat (Surat Masuk/Keluar, Agenda, Notulen Rapat, and Dokumen Arsip)",
+    "Department heads (Kabid) custom modules (Kerohanian, Sosial, Budaya, Humas)",
+    "Editable sample data with MongoDB backend persistence and reset options"
+  ],
+  "image_urls": [
+    {
+      "category": "campus_hero",
+      "url": "https://images.unsplash.com/photo-1732115234692-3ee71d5363af?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5JTIwY2FmpnVzJTIwYXJjaGl0ZWN0dXJlJTIwYnVpbGRpbmclMjBpbmRvbmVzaWF8ZW58MHx8fDE3ODgxNzQ3Nzh8MA&ixlib=rb-4.1.0&q=85",
+      "description": "IIB Darmajaya campus atmosphere"
+    },
+    {
+      "category": "cultural_event",
+      "url": "https://images.unsplash.com/photo-1542897644-e04428948020?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxoaW5kdSUyMGN1bHR1cmFsJTIwc3R1ZGVudCUyMG9yZ2FuaXphdGlvbiUyMGV2ZW50JTIwYmFsaSUyMGluZG9uZXNpYXxlbnwwfHx8fDE3ODgxNzQ3NzV8MA&ixlib=rb-4.1.0&q=85",
+      "description": "UKM Permadu Parade Budaya & Cultural Tradition"
+    }
+  ],
+  "instructions_to_main_agent": "Build a robust fullstack web application using React JS frontend and Python FastAPI backend with MongoDB database. Ensure all 6 roles can log in and view/edit their specific modules (Ketua Umum, Wakil, Sekretaris, Bendahara, Kabid, Anggota). All forms must have CRUD operations persisted in MongoDB. Include quick demo login buttons for testing ease. Follow all UI/UX guidelines with generous spacing, clean typography, and zero transparent overlays."
+}

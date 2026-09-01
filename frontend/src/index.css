@@ -1,0 +1,262 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================================================
+   UKM PERMADU DARMAJAYA — Deep Navy + Midnight Black Aesthetic
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap');
+
+:root {
+  --p-ink: #0A1628;        /* midnight ink */
+  --p-navy: #0F1E3D;       /* deep navy */
+  --p-royal: #1E40AF;      /* royal blue */
+  --p-azure: #3B82F6;      /* azure highlight */
+  --p-sky: #93C5FD;        /* soft sky */
+  --p-gold: #F0B429;       /* warm gold accent from logo crown */
+  --p-crimson: #B91C1C;    /* subtle red from logo border */
+  --p-cream: #F5F7FB;      /* page background */
+  --p-bone: #E8EEF7;       /* subtle surface */
+  --p-line: #D6DFEC;       /* border line */
+  --p-text: #0F1E3D;
+  --p-muted: #4A5A75;
+}
+
+@layer base {
+  :root {
+    --background: 218 40% 97%;
+    --foreground: 220 60% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 60% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 60% 15%;
+    --primary: 223 60% 15%;
+    --primary-foreground: 218 40% 97%;
+    --secondary: 218 40% 94%;
+    --secondary-foreground: 220 60% 15%;
+    --muted: 218 30% 92%;
+    --muted-foreground: 216 20% 40%;
+    --accent: 40 88% 55%;
+    --accent-foreground: 220 60% 15%;
+    --destructive: 0 74% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 218 30% 88%;
+    --input: 218 30% 88%;
+    --ring: 220 60% 15%;
+    --radius: 0.75rem;
+    --chart-1: 220 60% 20%;
+    --chart-2: 217 91% 60%;
+    --chart-3: 40 88% 55%;
+    --chart-4: 210 40% 45%;
+    --chart-5: 0 74% 42%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  html, body {
+    background-color: var(--p-cream);
+    color: var(--p-text);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+  .font-display { font-family: 'Fraunces', serif; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--p-bone); }
+::-webkit-scrollbar-thumb { background: var(--p-royal); border-radius: 8px; border: 2px solid var(--p-bone); }
+::-webkit-scrollbar-thumb:hover { background: var(--p-ink); }
+
+/* Dotted halftone (from logo background) */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(30, 64, 175, 0.14) 1.2px, transparent 1.4px);
+  background-size: 16px 16px;
+}
+.dot-pattern-dark {
+  background-image: radial-gradient(circle, rgba(240, 180, 41, 0.09) 1.2px, transparent 1.4px);
+  background-size: 16px 16px;
+}
+
+/* Grain overlay */
+.grain-overlay { position: relative; }
+.grain-overlay::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay; opacity: .3; pointer-events: none;
+}
+
+/* Ornamental divider */
+.divider-ornament { display: flex; align-items: center; gap: 12px; color: var(--p-gold); }
+.divider-ornament::before, .divider-ornament::after {
+  content: ""; height: 1px; flex: 1;
+  background: linear-gradient(90deg, transparent, rgba(240, 180, 41, 0.6), transparent);
+}
+
+/* Sidebar link */
+.sidebar-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; border-radius: 10px;
+  color: rgba(220, 232, 255, 0.7);
+  font-weight: 500; font-size: 14px;
+  transition: background-color .2s ease, color .2s ease, transform .2s ease;
+  border-left: 3px solid transparent;
+}
+.sidebar-link:hover { background: rgba(59, 130, 246, 0.12); color: var(--p-sky); }
+.sidebar-link.active {
+  background: linear-gradient(90deg, rgba(240, 180, 41, 0.14), transparent);
+  color: var(--p-gold);
+  border-left-color: var(--p-gold);
+}
+
+/* Stat card */
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--p-line);
+  border-radius: 14px;
+  padding: 22px;
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--p-azure);
+  box-shadow: 0 12px 30px -18px rgba(30, 64, 175, 0.45);
+}
+
+/* Data card */
+.data-card { background: #fff; border: 1px solid var(--p-line); border-radius: 14px; overflow: hidden; }
+
+/* Chip / Badge */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+}
+.chip-navy   { background: rgba(15, 30, 61, 0.1); color: var(--p-navy); }
+.chip-royal  { background: rgba(30, 64, 175, 0.12); color: var(--p-royal); }
+.chip-gold   { background: rgba(240, 180, 41, 0.15); color: #8a6d15; }
+.chip-crimson{ background: rgba(185, 28, 28, 0.1); color: var(--p-crimson); }
+.chip-muted  { background: rgba(74, 90, 117, 0.12); color: var(--p-muted); }
+.chip-emerald { background: rgba(30, 64, 175, 0.12); color: var(--p-royal); }
+.chip-terra   { background: rgba(185, 28, 28, 0.1); color: var(--p-crimson); }
+
+/* Button */
+.btn-primary {
+  background: linear-gradient(135deg, var(--p-navy), var(--p-royal));
+  color: #fff; padding: 11px 22px; border-radius: 999px;
+  font-weight: 600; font-size: 14px;
+  transition: transform .2s ease, box-shadow .25s ease, filter .25s ease;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover { transform: translateY(-1px); filter: brightness(1.1); box-shadow: 0 8px 24px -12px rgba(30, 64, 175, .5); }
+
+.btn-gold-outline {
+  border: 1.5px solid var(--p-gold); color: #8a6d15;
+  padding: 10px 20px; border-radius: 999px;
+  font-weight: 600; font-size: 14px;
+  transition: background .25s ease, color .25s ease;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-gold-outline:hover { background: var(--p-gold); color: var(--p-ink); }
+
+/* Table */
+.perm-table { width: 100%; border-collapse: collapse; }
+.perm-table th {
+  text-align: left; padding: 14px 18px;
+  background: var(--p-bone); color: var(--p-navy);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  border-bottom: 1px solid var(--p-line);
+}
+.perm-table td { padding: 14px 18px; font-size: 14px; color: var(--p-text); border-bottom: 1px solid var(--p-line); }
+.perm-table tr:last-child td { border-bottom: none; }
+.perm-table tbody tr:hover { background: rgba(59, 130, 246, 0.04); }
+
+/* Fade animations */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.fade-up { animation: fadeUp .5s ease both; }
+.fade-up-1 { animation-delay: .05s; }
+.fade-up-2 { animation-delay: .12s; }
+.fade-up-3 { animation-delay: .2s; }
+.fade-up-4 { animation-delay: .28s; }
+
+/* Sidebar bg — deep navy → midnight black */
+.sidebar-bg {
+  background:
+    radial-gradient(circle at 15% 0%, rgba(240, 180, 41, 0.09), transparent 45%),
+    radial-gradient(circle at 100% 100%, rgba(30, 64, 175, 0.2), transparent 55%),
+    linear-gradient(180deg, #0A1628 0%, #04070F 100%);
+}
+
+/* Section header accent */
+.section-title-accent::before {
+  content: ""; display: inline-block; width: 6px; height: 24px;
+  background: var(--p-gold); border-radius: 3px;
+  margin-right: 12px; vertical-align: -6px;
+}
+
+/* Hero band on dashboard (logo backdrop) */
+.hero-band {
+  position: relative;
+  border-radius: 20px; overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 30%, rgba(59, 130, 246, 0.25), transparent 50%),
+    radial-gradient(circle at 85% 90%, rgba(240, 180, 41, 0.2), transparent 55%),
+    linear-gradient(135deg, #0A1628 0%, #0F1E3D 50%, #1E40AF 130%);
+  color: #F5F7FB;
+}
+.hero-band::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("../public/permadu-logo.png");
+  background-repeat: no-repeat;
+  background-position: right -60px center;
+  background-size: contain;
+  opacity: 0.14;
+  filter: brightness(1.4);
+  pointer-events: none;
+}
+.hero-band::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(240, 180, 41, 0.05) 1px, transparent 1.2px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+/* Avatar ring */
+.avatar-ring {
+  background: linear-gradient(135deg, var(--p-gold), var(--p-royal));
+  padding: 2px; border-radius: 999px;
+}
+.avatar-ring > img, .avatar-ring > div {
+  border-radius: 999px; background: #fff; overflow: hidden;
+}
+
+/* Login ornament */
+.login-ornament {
+  position: absolute;
+  border: 1px solid rgba(240, 180, 41, 0.25);
+  border-radius: 50%; pointer-events: none;
+}
+
+/* Ring accent for stat cards on hover */
+.ring-gold { box-shadow: 0 0 0 2px rgba(240, 180, 41, 0.4); }
+
+/* File upload zone */
+.upload-zone {
+  border: 2px dashed var(--p-line);
+  border-radius: 14px;
+  padding: 24px; text-align: center;
+  transition: border-color .25s ease, background .25s ease;
+  cursor: pointer;
+}
+.upload-zone:hover { border-color: var(--p-royal); background: rgba(59, 130, 246, 0.04); }
+
+/* Calendar day cell with event dot */
+.cal-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--p-gold); display: inline-block; margin: 1px;
+}
